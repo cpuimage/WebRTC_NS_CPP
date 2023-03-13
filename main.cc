@@ -120,7 +120,7 @@ int nsProc(short *input, size_t SampleCount, size_t sampleRate, int num_channels
     NoiseSuppressor ns(cfg, sampleRate, num_channels);
     short *buffer = input;
     bool split_bands = sampleRate > 16000;
-    uint64_t frames = (SampleCount / stream_config.num_frames());
+    uint64_t frames = (SampleCount / stream_config.num_samples());
     for (size_t frame_index = 0; frame_index < frames; ++frame_index) {
         audio.CopyFrom(buffer, stream_config);
         if (split_bands) {
@@ -132,7 +132,7 @@ int nsProc(short *input, size_t SampleCount, size_t sampleRate, int num_channels
             audio.MergeFrequencyBands();
         }
         audio.CopyTo(stream_config, buffer);
-        buffer += stream_config.num_frames();
+        buffer += stream_config.num_samples();
     }
     return 0;
 }
